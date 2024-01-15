@@ -1,0 +1,19 @@
+.MultiSelect__menuItem::before {
+  content: '✓';
+  margin-right: var(--mui-grid-size);
+  font-weight: 700;
+  color: var(--mui-palette-primary-main);
+  visibility: hidden;
+}
+
+.MultiSelect__menuItem.Mui-selected::before {
+  visibility: visible;
+}
+
+.MultiSelect__chip {
+  margin-right: calc(var(--mui-grid-size) * 0.5);
+}
+
+.MultiSelect .MuiSelect-select {
+  height: calc(var(--mui-grid-size) * 3) !important;
+}

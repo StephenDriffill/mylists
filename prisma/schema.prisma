@@ -1,0 +1,97 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
+}
+
+model User {
+  id       String @id @default(cuid())
+  username String @unique
+  email    String @unique
+
+  resetPassword       Boolean   @default(false) @map("reset_password")
+  locked              Boolean   @default(false)
+  failedLoginAttempts Int       @default(0) @map("failed_login_attempts")
+  lastLogin           DateTime? @map("last_login")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @default("system") @map("created_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String   @default("system") @map("updated_by")
+
+  password  Password?
+  userRoles UserRole[]
+
+  @@map("user")
+}
+
+model Password {
+  hash String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @default("system") @map("created_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String   @default("system") @map("updated_by")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String @unique @map("user_id")
+
+  @@map("password")
+}
+
+enum RoleName {
+  admin
+  user
+
+  @@map("role_name")
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        RoleName @unique
+  description String?
+  default     Boolean  @default(false)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @default("system") @map("created_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String   @default("system") @map("updated_by")
+
+  userRoles UserRole[]
+
+  @@map("role")
+}
+
+model UserRole {
+  id     String @id @default(cuid())
+  userId String @map("user_id")
+  roleId String @map("role_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @default("system") @map("created_by")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  updatedBy String   @default("system") @map("updated_by")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@unique([userId, roleId])
+  @@map("user_role")
+}
+
+model ErrorLog {
+  id      String  @id @default(cuid())
+  message String
+  stack   String?
+  status  String?
+  url     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  createdBy String   @default("system") @map("created_by")
+
+  @@map("error_log")
+}

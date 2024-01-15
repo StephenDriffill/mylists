@@ -1,0 +1,45 @@
+.Header__appBarContainer {
+  flex-grow: 1;
+}
+.Header__logoContainer {
+  display: flex;
+  align-items: center;
+}
+.Header__appBar {
+  border-bottom: 1px solid var(--mui-palette-divider);
+}
+.Header__links {
+  display: flex;
+  gap: var(--mui-grid-size);
+  flex-grow: 1;
+  padding: 0 calc(var(--mui-grid-size) * 3);
+}
+.Header__links a.active {
+  background-color: var(--mui-palette-primary-faint);
+}
+.Header__avatar {
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.Header__menu {
+  margin-top: calc(var(--mui-grid-size) * 5.5);
+}
+.Header__signedInAsContainer {
+  display: flex !important;
+  align-items: start !important;
+  flex-direction: column;
+}
+.Header__signedInAsContainer .MuiTypography-root {
+  line-height: 1.2;
+}
+.Header__signedInAs {
+  color: var(--mui-palette-text-secondary);
+}
+.Header__logoutButton {
+  text-align: left;
+}
+
+.Document__body--dark .Header__signedInAs {
+  color: var(--mui-palette-text-primary);
+  opacity: 0.7;
+}

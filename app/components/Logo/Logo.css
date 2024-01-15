@@ -1,0 +1,32 @@
+.Logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  user-select: none;
+}
+.Logo--block {
+  flex-direction: column;
+}
+.Logo__icon {
+  fill: var(--mui-palette-primary-main);
+  width: calc(var(--mui-grid-size) * 3.5);
+  height: calc(var(--mui-grid-size) * 3.5);
+}
+.Logo--block .Logo__icon {
+  margin-bottom: var(--mui-grid-size);
+  width: calc(var(--mui-grid-size) * 5);
+  height: calc(var(--mui-grid-size) * 5);
+}
+.Logo--inline .Logo__icon {
+  margin-right: var(--mui-grid-size);
+}
+.Logo__textWrapper {
+  display: flex;
+}
+.Logo__text {
+  color: var(--mui-palette-text-primary);
+  letter-spacing: -0.05em;
+}
+.Logo__textLeft {
+  font-weight: 700 !important;
+}

@@ -1,0 +1,7 @@
+.TabPanel:not(.TabPanel--active) {
+  display: none;
+}
+
+.TabPanel__content {
+  padding: calc(var(--mui-grid-size) * 2);
+}

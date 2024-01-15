@@ -1,0 +1,33 @@
+.Page {
+  padding: calc(var(--mui-grid-size) * 3);
+}
+.Page--disablePadding,
+.Page--disablePadding .MuiContainer-root {
+  padding: 0;
+}
+
+.PageHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.PageHeader__breadcrumbs {
+  min-height: calc(var(--mui-grid-size) * 3);
+}
+.PageHeader__breadcrumbSeparator {
+  margin: 0 var(--mui-grid-size) !important;
+  color: var(--mui-palette-text-secondary);
+}
+.PageHeader__titleContainer {
+  display: flex;
+  align-items: center;
+}
+
+@media (width < 600px) {
+  .Page:not(.Page--disablePadding) {
+    padding: calc(var(--mui-grid-size) * 2);
+  }
+  .PageHeader__title {
+    font-size: 1rem;
+  }
+}

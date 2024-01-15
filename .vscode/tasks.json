@@ -1,0 +1,115 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build db",
+      "icon": {
+        "id": "gear",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "docker compose -p mylists up -d --build",
+      "problemMatcher": []
+    },
+    {
+      "label": "start db",
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "docker compose -p mylists up -d",
+      "problemMatcher": []
+    },
+    {
+      "label": "setup db",
+      "icon": {
+        "id": "tools",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "npm",
+      "script": "setup",
+      "problemMatcher": []
+    },
+    {
+      "label": "prisma studio",
+      "icon": {
+        "id": "zap",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "npx prisma studio",
+      "problemMatcher": []
+    },
+    {
+      "label": "prisma reset db",
+      "icon": {
+        "id": "refresh",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "npx prisma migrate reset --force",
+      "problemMatcher": []
+    },
+    {
+      "label": "prisma migrate db",
+      "icon": {
+        "id": "database",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "npx prisma migrate dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "prisma pull db",
+      "icon": {
+        "id": "cloud-download",
+        "color": "terminal.ansiCyan"
+      },
+      "type": "shell",
+      "command": "npx prisma db pull",
+      "problemMatcher": []
+    },
+    {
+      "label": "start app",
+      "icon": {
+        "id": "play",
+        "color": "terminal.ansiGreen"
+      },
+      "type": "npm",
+      "script": "dev",
+      "problemMatcher": []
+    },
+    {
+      "label": "playwright setup",
+      "icon": {
+        "id": "tools",
+        "color": "terminal.ansiYellow"
+      },
+      "type": "npm",
+      "script": "test:e2e:install",
+      "problemMatcher": []
+    },
+    {
+      "label": "run e2e tests",
+      "icon": {
+        "id": "beaker",
+        "color": "terminal.ansiYellow"
+      },
+      "type": "shell",
+      "command": "npx playwright test",
+      "problemMatcher": []
+    },
+    {
+      "label": "run e2e tests ui ",
+      "icon": {
+        "id": "beaker",
+        "color": "terminal.ansiYellow"
+      },
+      "type": "shell",
+      "command": "npx playwright test --ui",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+.Audit {
+  display: flex;
+  align-items: center;
+  color: var(--mui-palette-text-secondary);
+  min-height: calc(var(--mui-grid-size) * 3);
+}
+.Audit__icon {
+  font-size: 12px !important;
+  margin-right: calc(var(--mui-grid-size) * 0.5);
+}
+.Audit__text {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.Audit__time {
+  text-decoration: underline dotted;
+  cursor: help;
+}

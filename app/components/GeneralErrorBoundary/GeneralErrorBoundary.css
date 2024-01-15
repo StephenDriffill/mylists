@@ -1,0 +1,20 @@
+.GeneralErrorBoundary {
+  margin-top: calc(var(--mui-grid-size) * 8);
+  text-align: center;
+}
+.GeneralErrorBoundaryTitle {
+  margin-bottom: var(--mui-grid-size) !important;
+}
+.GeneralErrorBoundaryMessage {
+  margin-bottom: calc(var(--mui-grid-size) * 1.5) !important;
+}
+.GeneralErrorBoundaryStack {
+  font-size: 12px;
+  padding: calc(var(--mui-grid-size) * 4);
+  background: #f9f9f9;
+  color: black;
+  overflow: auto;
+  text-align: left;
+  border-radius: 4px;
+  border-left: 3px solid red;
+}
