@@ -1,22 +1,22 @@
-import { Autocomplete, TextField, Typography } from '@mui/material';
+import {
+  Autocomplete,
+  List,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@mui/material';
 import * as React from 'react';
 
 import { Page } from '~/components';
+import films from '~/films';
 
 export const meta = () => [{ title: 'MYLISTS' }];
 
-const films = [
-  { label: 'The Shawshank Redemption', year: 1994 },
-  { label: 'The Godfather', year: 1972 },
-  { label: 'The Godfather: Part II', year: 1974 },
-  { label: 'The Dark Knight', year: 2008 },
-  { label: '12 Angry Men', year: 1957 },
-  { label: "Schindler's List", year: 1993 },
-  { label: 'Pulp Fiction', year: 1994 },
-];
-
 export default function Index() {
-  const [watchlist, setWatchList] = React.useState<typeof films>([]);
+  const [watchlist, setWatchList] = React.useState<typeof films>([
+    films[2],
+    films[3],
+  ]);
   const [inputValue, setInputValue] = React.useState('');
   const [value, setValue] = React.useState(null);
 
@@ -27,12 +27,27 @@ export default function Index() {
 
   return (
     <Page>
-      {watchlist.map((movie, index) => (
-        <Typography key={index}>{movie.label}</Typography>
-      ))}
+      <List>
+        {watchlist.map((movie, index) => (
+          <ListItem
+            disablePadding
+            key={index}
+            sx={{
+              display: 'list-item',
+              listStyle: 'decimal',
+              ml: 3,
+              paddingY: 0.25,
+            }}
+          >
+            <ListItemText>{movie.label}</ListItemText>
+          </ListItem>
+        ))}
+      </List>
       <Autocomplete
+        autoHighlight
         clearOnBlur={false}
         disablePortal
+        fullWidth
         inputValue={inputValue}
         onChange={(_event, value) => {
           if (value !== null) {
@@ -62,7 +77,6 @@ export default function Index() {
         }}
         options={films}
         renderInput={(params) => <TextField {...params} />}
-        sx={{ width: 300 }}
         value={value}
       />
     </Page>
