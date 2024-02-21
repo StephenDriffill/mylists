@@ -15,6 +15,7 @@ import './_index.css';
 type Film = (typeof films)[0];
 
 const MINIMUM_SEARCH_LENGTH = 3;
+const MAX_OPTIONS = 10;
 
 export const meta = () => [{ title: 'MYLISTS' }];
 
@@ -64,9 +65,13 @@ export default function Index() {
         disablePortal
         filterOptions={(options, state) => {
           if (state.inputValue.length >= MINIMUM_SEARCH_LENGTH) {
-            return options.filter((item) =>
-              item.label.toLowerCase().includes(state.inputValue.toLowerCase()),
-            );
+            return options
+              .filter((item) =>
+                item.label
+                  .toLowerCase()
+                  .includes(state.inputValue.toLowerCase()),
+              )
+              .slice(0, MAX_OPTIONS);
           }
           return [];
         }}
