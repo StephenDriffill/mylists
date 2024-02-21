@@ -2,18 +2,24 @@ import {
   Autocomplete,
   List,
   ListItem,
-  ListItemText,
   TextField,
+  Typography,
 } from '@mui/material';
 import * as React from 'react';
 
 import { Page } from '~/components';
 import films from '~/films';
 
+import './_index.css';
+
+type Film = (typeof films)[0];
+
+const MINIMUM_SEARCH_LENGTH = 3;
+
 export const meta = () => [{ title: 'MYLISTS' }];
 
 export default function Index() {
-  const [watchlist, setWatchList] = React.useState<typeof films>([
+  const [watchlist, setWatchList] = React.useState<Film[]>([
     films[2],
     films[3],
   ]);
@@ -36,10 +42,20 @@ export default function Index() {
               display: 'list-item',
               listStyle: 'decimal',
               ml: 3,
-              paddingY: 0.25,
+              paddingY: 1,
+              pl: 2,
+              fontSize: 18,
+              color: 'text.secondary',
             }}
           >
-            <ListItemText>{movie.label}</ListItemText>
+            <Typography
+              sx={{
+                fontSize: 20,
+                color: 'text.primary',
+              }}
+            >
+              {movie.label}
+            </Typography>
           </ListItem>
         ))}
       </List>
@@ -47,8 +63,21 @@ export default function Index() {
         autoHighlight
         clearOnBlur={false}
         disablePortal
+        filterOptions={(options, state) => {
+          if (state.inputValue.length >= MINIMUM_SEARCH_LENGTH) {
+            return options.filter((item) =>
+              item.label.toLowerCase().includes(state.inputValue.toLowerCase()),
+            );
+          }
+          return [];
+        }}
         fullWidth
         inputValue={inputValue}
+        noOptionsText={
+          inputValue.length >= MINIMUM_SEARCH_LENGTH
+            ? 'No results'
+            : 'Type minimum 3 characters to search'
+        }
         onChange={(_event, value) => {
           if (value !== null) {
             const isAlreadyInList = watchlist.some(
@@ -76,7 +105,15 @@ export default function Index() {
           setInputValue(newInputValue);
         }}
         options={films}
-        renderInput={(params) => <TextField {...params} />}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            placeholder="Search for movie..."
+            variant="outlined"
+          />
+        )}
+        size="medium"
+        sx={{ pt: 1 }}
         value={value}
       />
     </Page>
