@@ -19,10 +19,9 @@ const MINIMUM_SEARCH_LENGTH = 3;
 export const meta = () => [{ title: 'MYLISTS' }];
 
 export default function Index() {
-  const [watchlist, setWatchList] = React.useState<Film[]>([
-    films[2],
-    films[3],
-  ]);
+  const [watchlist, setWatchList] = React.useState<Film['label'][]>(
+    films.slice(5, 40).map((film) => film.label),
+  );
   const [inputValue, setInputValue] = React.useState('');
   const [value, setValue] = React.useState(null);
 
@@ -54,7 +53,7 @@ export default function Index() {
                 color: 'text.primary',
               }}
             >
-              {movie.label}
+              {movie}
             </Typography>
           </ListItem>
         ))}
@@ -72,6 +71,7 @@ export default function Index() {
           return [];
         }}
         fullWidth
+        getOptionDisabled={(option) => watchlist.includes(option.label)}
         inputValue={inputValue}
         noOptionsText={
           inputValue.length >= MINIMUM_SEARCH_LENGTH
@@ -81,11 +81,11 @@ export default function Index() {
         onChange={(_event, value) => {
           if (value !== null) {
             const isAlreadyInList = watchlist.some(
-              (movie) => movie.label === value.label,
+              (movie) => movie === value.label,
             );
 
             if (!isAlreadyInList) {
-              setWatchList([...watchlist, value]);
+              setWatchList([...watchlist, value.label]);
             }
           }
         }}
@@ -108,7 +108,7 @@ export default function Index() {
         renderInput={(params) => (
           <TextField
             {...params}
-            placeholder="Search for movie..."
+            placeholder="Search for movie to add..."
             variant="outlined"
           />
         )}
