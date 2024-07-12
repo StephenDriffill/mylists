@@ -32,21 +32,21 @@ function reorder<T>(list: T[], startIndex: number, endIndex: number) {
 function getListStyle(isDraggingOver: boolean) {
   return {
     // background: isDraggingOver ? 'lightblue' : undefined,
-    // padding: grid,
+    // padding: ,
   };
 }
 
-function getListItemStyle(isDragging: boolean, draggableStyle: any) {
-  return {
-    userSelect: 'none',
-    // padding: grid * 2,
-    // margin: `0 0 ${grid}px 0`,
-    // bgcolor: isDragging ? 'text.secondary' : undefined,
+// function getListItemStyle(isDragging: boolean, draggableStyle: any) {
+//   return {
+//     userSelect: 'none',
+//     // padding: grid * 2,
+//     // margin: `0 0 ${grid}px 0`,
+//     // bgcolor: isDragging ? 'text.secondary' : undefined,
 
-    // styles we need to apply on draggables
-    ...draggableStyle,
-  };
-}
+//     // styles we need to apply on draggables
+//     ...draggableStyle,
+//   };
+// }
 
 function getTypographyStyle(isDragging: boolean) {
   return {
@@ -57,6 +57,24 @@ function getTypographyStyle(isDragging: boolean) {
   };
 }
 
+function invertTranslate(transform: string) {
+  // return if isn't doing a translate
+  if (!transform.startsWith('translate')) {
+    return transform;
+  }
+
+  // return if doesnt have a y component
+  if (!transform.includes(',')) {
+    return transform;
+  }
+
+  // inject a negative sign before the y component
+  const transformWithInvertedY = transform.replace(/,[ ]*/gm, ',-');
+  const newTransform = `${transformWithInvertedY} !important`;
+
+  return newTransform;
+}
+
 export const meta = () => [{ title: 'MYLISTS' }];
 
 export const loader = async () => {
@@ -65,10 +83,15 @@ export const loader = async () => {
 
 export default function Index() {
   const [watchlist, setWatchList] = React.useState<Film['label'][]>(
-    films.slice(5, 40).map((film) => film.label),
+    films.slice(5, 10).map((film) => film.label),
   );
   const [inputValue, setInputValue] = React.useState('');
   const [value, setValue] = React.useState(null);
+  const [dragDestinationIndex, setDragDestinationIndex] = React.useState<
+    number | null
+  >(null);
+
+  console.log('dragDestinationIndex', dragDestinationIndex);
 
   React.useEffect(() => {
     setInputValue('');
@@ -78,22 +101,9 @@ export default function Index() {
   return (
     <Page>
       <Box sx={{ display: 'flex' }}>
-        <List>
-          {watchlist.map((movie, index) => (
-            <ListItem disablePadding key={movie} sx={{ height: 40 }}>
-              <ListItemText
-                sx={{
-                  fontSize: 18,
-                  color: 'text.secondary',
-                }}
-              >
-                {index + 1}
-              </ListItemText>
-            </ListItem>
-          ))}
-        </List>
         <DragDropContext
           onDragEnd={(result) => {
+            setDragDestinationIndex(null);
             setWatchList((prev) => {
               // dropped outside the list
               if (result.destination === null) {
@@ -106,43 +116,73 @@ export default function Index() {
               );
             });
           }}
+          onDragStart={(start) => setDragDestinationIndex(start.source.index)}
+          onDragUpdate={(update) => {
+            console.log(update);
+            setDragDestinationIndex(update.destination?.index ?? null);
+          }}
         >
           <Droppable droppableId="droppable">
-            {(provided, snapshot) => (
+            {(providedDroppable, snapshotDroppable) => (
               <List
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-                sx={getListStyle(snapshot.isDraggingOver)}
+                {...providedDroppable.droppableProps}
+                ref={providedDroppable.innerRef}
+                sx={getListStyle(snapshotDroppable.isDraggingOver)}
               >
                 {watchlist.map((movie, index) => (
-                  <Draggable draggableId={movie} index={index} key={movie}>
-                    {(provided, snapshot) => (
-                      <ListItem
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        sx={{
-                          // fontSize: 20,
-                          height: 40,
-                          color: 'text.primary',
-                          ...getListItemStyle(
-                            snapshot.isDragging,
-                            provided.draggableProps.style,
-                          ),
-                        }}
-                      >
-                        <ListItemText disableTypography>
-                          <Typography
-                            component="span"
-                            noWrap
-                            sx={getTypographyStyle(snapshot.isDragging)}
+                  <Box
+                    key={movie}
+                    sx={{ display: 'flex', alignItems: 'center' }}
+                  >
+                    <span>{index + 1}</span>
+                    {index === dragDestinationIndex
+                      ? providedDroppable.placeholder
+                      : null}
+                    <Draggable draggableId={movie} index={index}>
+                      {(providedDraggable, snapshotDraggable) => (
+                        <>
+                          {console.log(
+                            providedDraggable.draggableProps.style?.transform,
+                          )}
+                          <ListItem
+                            ref={providedDraggable.innerRef}
+                            {...providedDraggable.draggableProps}
+                            {...providedDraggable.dragHandleProps}
+                            sx={
+                              snapshotDraggable.isDragging ||
+                              dragDestinationIndex === null
+                                ? {}
+                                : index > dragDestinationIndex
+                                  ? { transform: 'none !important' }
+                                  : {
+                                      transform: invertTranslate(
+                                        providedDraggable.draggableProps.style
+                                          ?.transform ?? '',
+                                      ),
+                                    }
+                            }
+                            // sx={{
+                            //   ...getListItemStyle(
+                            //     snapshotDraggable.isDragging,
+                            //     providedDraggable.draggableProps.style,
+                            //   ),
+                            // }}
                           >
-                            {movie}
-                          </Typography>
-                        </ListItemText>
-                      </ListItem>
-                    )}
-                  </Draggable>
+                            <ListItemText disableTypography>
+                              <Typography
+                                component="span"
+                                sx={getTypographyStyle(
+                                  snapshotDraggable.isDragging,
+                                )}
+                              >
+                                {movie}
+                              </Typography>
+                            </ListItemText>
+                          </ListItem>
+                        </>
+                      )}
+                    </Draggable>
+                  </Box>
                 ))}
               </List>
             )}
